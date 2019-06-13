@@ -25,7 +25,12 @@ public class Menu {
         }
         finally{
             if(IRE == null){
-
+                if(temp.matches("^((y|Y)(e|E)(s|S))")){
+                    inputOutput.printGreeting();
+                    inputOutput.inputCorpusPath();
+                    this.dictionary = new Dictionary(inputOutput,inputOutput.getCorpusLocalFile());
+                    dictionary.createDictionary();
+                }
             }
             else{
                 createOrLoad();

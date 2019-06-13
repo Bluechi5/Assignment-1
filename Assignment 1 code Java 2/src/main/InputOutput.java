@@ -1,10 +1,14 @@
 package main;
 
+import java.io.IOException;
 import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class InputOutput {
-    private File file;
+    private LocalFile localFile;
+    private LocalFile corpusLocalFile;
     public String inputString(){
         var scanner = new Scanner(System.in);
         return scanner.nextLine();
@@ -24,10 +28,45 @@ public class InputOutput {
     public void printErrorIRE(InvalidResponseException IRE){
         System.out.println("\n"+IRE.getInput() + " is not a valid input " + IRE.getMessage());
     }
-    public void setFile(){
-
+    public void printErrorIOE(IOException IOE){
+        System.out.println("\n"+IOE.getMessage());
     }
-    public File getFile() {
-        return file;
+    public void inputCorpusPath(){
+        Path temp = null;
+        var IPECaught = false;
+        var scanner = new Scanner(System.in);
+        try{
+            temp = Paths.get(scanner.nextLine());
+        }
+        catch(InvalidPathException IPE){
+            printErrorIPE(IPE);
+            IPECaught = true;
+        }
+        finally{
+            if (!IPECaught) {
+                    setCorpusLocalFile(new LocalFile(temp));
+            }
+            else{
+                temp = null;
+                IPECaught = false;
+                scanner = new Scanner(System.in);
+                inputCorpusPath();
+            }
+        }
+    }
+
+    public void setCorpusLocalFile(LocalFile corpusLocalFile) {
+        this.corpusLocalFile = corpusLocalFile;
+    }
+
+    public LocalFile getCorpusLocalFile() {
+        return corpusLocalFile;
+    }
+
+    public void setLocalFile(LocalFile localFile){
+        this.localFile = localFile;
+    }
+    public LocalFile getLocalFile() {
+        return localFile;
     }
 }
